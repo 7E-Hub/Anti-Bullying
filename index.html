@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7E Hub: Empower Empathy, Engage Everyone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto+Mono:wght@300;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base Variables and Resets - HIGH CONTRAST HACKER THEME (BRIGHTER) */
+        :root {
+            --font-heading: 'Orbitron', sans-serif;
+            --font-body: 'Roboto Mono', monospace;
+            --font-background-word: 'Bebas Neue', sans-serif;
+            --bg-color: #000000; /* Literal Black (Primary Page Background) */
+            --box-bg-color: #000000; /* Literal Black (FOR ALL CONTENT BOXES) */
+            --text-color: #ffffff; /* Pure White text */
+            --muted: #aaffff; /* Very bright Light Cyan for supporting text */
+            --border-color: rgba(0, 255, 255, 0.9); /* BRIGHT Neon Cyan border */
+            --accent1: #00ffff; /* PRIMARY BRIGHT Neon Cyan */
+            --accent2: #ff00ff; /* SECONDARY BRIGHT Electric Magenta */
+            --panel-border: rgba(255, 0, 255, 0.8); /* Magenta border for panels */
+            --max-width: 1200px;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at top, rgba(0, 255, 255, 0.1) 1%, transparent 70%); 
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-top: 0;
+            color: var(--accent1); 
+        }
+        h1 { 
+            font-size: clamp(2.5rem, 5vw, 3.8rem); 
+            text-shadow: 0 0 15px var(--accent1), 0 0 30px rgba(0, 255, 255, 0.8); 
+            color: var(--text-color);
+        }
+        h2 { font-size: clamp(2rem, 3.5vw, 2.5rem); margin-bottom: 0.5em; }
+        h3 { color: var(--accent2); }
+        .muted { color: var(--muted); }
+        
+        /* SCROLL REVEAL EFFECT */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating Compliments - MOVEMENT AND STYLING */
+        .floating-compliments {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 5; 
+            pointer-events: none;
+        }
+
+        /* Diagonal Glide Animation */
+        @keyframes diagonal-glide {
+            0% { transform: translate(var(--x-start), var(--y-start)); }
+            100% { transform: translate(var(--x-end), var(--y-end)); }
+        }
+
+        .floating-compliments div {
+            position: absolute;
+            color: var(--accent2); /* BRIGHT MAGENTA */
+            font-family: var(--font-background-word); 
+            font-weight: 400;
+            opacity: 0.75; 
+            text-shadow: 0 0 18px rgba(255, 0, 255, 1); /* BRIGHTER Magenta Maxed glow */
+            white-space: nowrap;
+            user-select: none;
+            animation: diagonal-glide infinite alternate ease-in-out; 
+            font-size: clamp(25px, 4vw, 40px); 
+        }
+        
+        /* Navigation - Dark, Glowing Bar */
+        .site {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-color); /* Black */
+            backdrop-filter: blur(10px); 
+            border-bottom: 3px solid var(--accent1); 
+            padding: 15px 8%;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 1); 
+        }
+        
+        /* Panels and Glassmorphism - Core Style (Solid Black Background) */
+        .section {
+            padding: 60px 8%;
+            max-width: var(--max-width);
+            margin: 30px auto; 
+            background: var(--box-bg-color); /* SOLID BLACK */
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.6); 
+            position: relative; 
+            z-index: 10; 
+        }
+
+        .panel {
+            padding: 24px;
+            background: var(--box-bg-color); /* SOLID BLACK */
+            border-radius: 8px;
+            border: 1px solid var(--panel-border); 
+            box-shadow: inset 0 0 12px rgba(0, 255, 255, 0.6); 
+            transition: all 0.3s ease;
+            position: relative; 
+            z-index: 12;
+        }
+
+        /* Utility Classes (Buttons) - Maxed Glow Buttons */
+        .btn {
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            box-shadow: 0 0 25px rgba(0, 255, 255, 1), 0 0 15px rgba(255, 0, 255, 0.8); 
+            color: #000;
+        }
+        
+        /* Resource Showcase (Game Panel) - Text Beside Image */
+        .game-panel {
+            display: grid;
+            grid-template-columns: 2fr 1fr; 
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 24px;
+            background: var(--box-bg-color); /* SOLID BLACK */
+            border: 2px solid var(--accent2); 
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.7); 
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .game-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 255, 0.8);
+        }
+
+        .game-panel-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            object-fit: cover;
+            aspect-ratio: 16 / 9;
+            border: 1px solid var(--accent1);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* FAQ Accordion Item Panel - Corrected Background */
+        .faq-item .panel {
+             background: var(--box-bg-color); /* SOLID BLACK */
+        }
+
+        @media (max-width: 768px) {
+            .game-panel {
+                grid-template-columns: 1fr; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-compliments" aria-hidden="true">
+    </div>
+
+    <nav class="site" role="navigation" aria-label="Main">
+        <div class="nav-inner" style="display:flex;justify-content:space-between;align-items:center;max-width:var(--max-width);margin:0 auto;">
+            <div class="brand" style="align-items:center;gap:10px;display:flex;">
+                <img src="https://placehold.co/44x44/00ffff/000000?text=7E" alt="7E Hub Logo" style="height:44px; width:auto; border-radius:10px; box-shadow:0 0 10px var(--accent1);" onerror="this.onerror=null; this.src='https://placehold.co/44x44/00ffff/000000?text=7E';">
+                <div>
+                    <div style="font-weight:900; color:var(--accent1); font-size:1.8rem; line-height:1; font-family:var(--font-heading); text-shadow:0 0 5px var(--accent1);">7E Hub</div>
+                    <div style="font-size:11px;color:var(--muted);font-family:var(--font-body); line-height:1;">Empower • Engage • Empathy</div>
+                </div>
+            </div>
+
+            <div class="primary" style="display:flex; gap:20px; align-items:center; font-family:var(--font-body);">
+                <a href="#home" class="text-sm transition" onclick="scrollToSection('home')">HOME</a>
+                <a href="#resources" class="text-sm transition" onclick="scrollToSection('resources')">RESOURCES</a>
+                <a href="#pledge" class="text-sm transition" onclick="scrollToSection('pledge')">PLEDGE</a>
+                <a href="#testimonials" class="text-sm transition" onclick="scrollToSection('testimonials')">REVIEWS</a>
+                <a href="#faq" class="text-sm transition" onclick="scrollToSection('faq')">FAQ</a>
+                <button class="cta btn" style="padding:8px 15px; border-radius:4px; font-weight:700; font-size:0.9rem;" onclick="openPledgeModal()">MAKE A PLEDGE</button>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="hero" role="banner" aria-label="Hero">
+        <div class="section reveal" style="margin-top: 20px;"> 
+            <div class="hero-inner" style="display:flex;gap:30px;align-items:center;padding:20px 0;">
+                <div class="hero-left" style="flex: 1.5 1 500px; max-width: 800px; padding-right:10px">
+                    <div id="dynamicChallenge" class="panel reveal" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding:12px;cursor:pointer; border:1px solid var(--accent2); box-shadow:0 0 15px rgba(255, 0, 255, 0.5);" onclick="handleChallengeClick()">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="font-size:1.5rem; color:var(--accent2); text-shadow:0 0 5px var(--accent2);">✨</div>
+                            <div class="challenge-text" id="challengeQuestion" style="font-weight:500;font-size:0.95rem; color: var(--text-color); font-family:var(--font-body);">Daily Affirmation: Loading kindness thought...</div>
+                        </div>
+                        <button class="btn-min" style="background:var(--accent1);border:none;color:#000;padding:6px 15px;border-radius:4px;font-size:0.8rem;font-weight:700;transition:background 0.2s; box-shadow:0 0 10px rgba(0, 255, 255, 0.7);" onclick="handleChallengeClick(event)">REFLECT</button>
+                    </div>
+                    <h1 class="hero-title glow" style="font-family:var(--font-heading);">7E Hub — EMPOWERING EMPATHY, ENGAGING EVERYONE</h1>
+                    <p class="hero-sub muted text-lg" style="color:var(--muted); font-family:var(--font-body);">A safe space and resource platform built to foster kindness, resilience, and a network dedicated to standing up against bullying.</p>
+                    <div class="hero-cta" style="margin-top:24px; display:flex; gap:15px; flex-wrap:wrap;">
+                        <button class="btn" onclick="scrollToSection('resources')" style="font-family:var(--font-body);">FIND RESOURCES</button>
+                        <button class="btn-ghost" onclick="scrollToSection('mission')" style="font-family:var(--font-body);">OUR MISSION</button>
+                    </div>
+                    <div style="display:flex;gap:12px;margin-top:30px; border-top:1px solid rgba(0, 255, 255, 0.5); padding-top:20px;">
+                        <div style="flex:1">
+                            <div style="color:var(--muted);font-size:13px; font-family:var(--font-body);">ACTIVE USERS</div>
+                            <div style="font-weight:700;font-size:24px; color:var(--accent1); text-shadow:0 0 10px var(--accent1); font-family:var(--font-heading);" class="counter" data-target="50234">0</div>
+                        </div>
+                        <div style="flex:1">
+                            <div style="color:var(--muted);font-size:13px; font-family:var(--font-body);">ACTION PLEDGES</div>
+                            <div style="font-weight:700;font-size:24px; color:var(--accent1); text-shadow:0 0 10px var(--accent1); font-family:var(--font-heading);" id="pledgeCounter">0</div>
+                        </div>
+                        <div style="flex:1">
+                            <div style="color:var(--muted);font-size:13px; font-family:var(--font-body);">DIGITAL GUIDES</div>
+                            <div style="font-weight:700;font-size:24px; color:var(--accent1); text-shadow:0 0 10px var(--accent1); font-family:var(--font-heading);">3 and more coming up</div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="hero-right panel" style="flex: 1 1 300px; max-width: 420px; min-height: 200px;" aria-hidden="true">
+                    <div style="display:flex;gap:12px;align-items:center;border-bottom:1px solid rgba(255, 0, 255, 0.5);padding-bottom:15px;">
+                        <div style="flex:1">
+                            <div class="muted" style="font-size:13px; color:var(--muted); font-family:var(--font-body);">MENTAL WELLNESS CHECK</div>
+                            <div style="font-weight:700;font-size:18px; color:var(--accent2); font-family:var(--font-heading);">BOOST YOUR RESILIENCE TODAY</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div class="muted" style="font-size:12px; color:var(--muted); font-family:var(--font-body);">TIME COMMITMENT</div>
+                            <div style="font-weight:700;color:var(--accent1);font-size:16px; font-family:var(--font-heading);">5 MINUTES</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:15px;display:grid;gap:15px;">
+                        <div style="display:flex;gap:12px;align-items:center;background:var(--box-bg-color);padding:12px;border-radius:8px;cursor:pointer;transition:background 0.2s; border: 1px solid var(--accent1);" onclick="openDemo('Empathy Guide')">
+                            <div style="width:50px;height:50px;border-radius:8px;background:linear-gradient(135deg,var(--accent1),#00e676);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.5rem; box-shadow:0 0 12px rgba(0, 255, 255, 0.8);">🤝</div>
+                            <div>
+                                <div class="muted small" style="color:var(--muted);">QUICK READ</div>
+                                <div style="font-weight:700; color:var(--text-color); font-family:var(--font-body);">THE EMPATHY GUIDE: CONFLICT</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:12px;align-items:center;background:var(--box-bg-color);padding:12px;border-radius:8px;cursor:pointer;transition:background 0.2s; border: 1px solid var(--accent2);" onclick="openDemo('Resilience Exercises')">
+                            <div style="width:50px;height:50px;border-radius:8px;background:linear-gradient(135deg,var(--accent2),#ffcc80);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.5rem; box-shadow:0 0 12px rgba(255, 0, 255, 0.8);">🧠</div>
+                            <div>
+                                <div class="muted small" style="color:var(--muted);">BOOST YOUR SPIRIT</div>
+                                <div style="font-weight:700; color:var(--text-color); font-family:var(--font-body);">DAILY RESILIENCE EXERCISES</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                </div>
+        </div>
+    </header>
+
+    <section id="mission" class="section reveal" aria-label="Our Mission" style="padding: 60px 8% 30px;">
+        <h2>OUR CORE MISSION</h2>
+        <p class="muted max-w-3xl" style="color:var(--muted); font-family:var(--font-body);">We provide tools for resilience and connection for anyone affected by bullying, ensuring no one has to face it alone. Our goal is to shift bystander culture into one of active allyship and support.</p>
+
+        
+        <div class="card-grid" style="margin-top:30px; display:flex; gap:20px; flex-wrap: wrap; justify-content:center;">
+            <div class="card reveal panel" style="flex: 1 1 300px; border-color:var(--accent2);">
+                <h3 style="color:var(--accent2);font-size:1.5rem; font-family:var(--font-heading);">EMPOWERMENT TOOLS</h3>
+                <p class="muted" style="color:var(--muted); font-family:var(--font-body);">Access practical guides and scripts for standing up for yourself and advocating for others safely.</p>
+            </div>
+            <div class="card reveal panel" style="flex: 1 1 300px; border-color:var(--accent2);">
+                <h3 style="color:var(--accent2);font-size:1.5rem; font-family:var(--font-heading);">RESILIENCE BUILDING</h3>
+                <p class="muted" style="color:var(--muted); font-family:var(--font-body);">Interactive exercises and support resources focused on mental and emotional strength.</p>
+            </div>
+            <div class="card reveal panel" style="flex: 1 1 300px; border-color:var(--accent2);">
+                <h3 style="color:var(--accent2);font-size:1.5rem; font-family:var(--font-heading);">COMMUNITY PLEDGES</h3>
+                <p class="muted" style="color:var(--muted); font-family:var(--font-body);">Join thousands of users committed to kindness and zero-tolerance for bullying through action pledges.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="resources" class="section reveal" style="border-color: var(--accent1); padding: 30px 8% 60px;">
+        <h2>THE 7E HUB RESOURCE CENTER</h2>
+        <p class="muted max-w-3xl" style="color:var(--muted); font-family:var(--font-body);">Explore our curated collection of guides, toolkits, and interactive exercises designed to equip you with the knowledge to respond effectively to bullying.</p>
+
+        <div style="margin-top:30px">
+            <div class="game-panel reveal" onclick="openDemo('Empathy Guide')">
+                <div class="game-panel-content">
+                    <h3 class="text-2xl" style="color:var(--accent1); font-family:var(--font-heading);">7E'S ASSEMBLY SUMMARY</h3>
+                    <p class="muted" style="color:var(--muted); font-family:var(--font-body);">If you missed our assembly on 14th October, read the document by pressing the button below</p>
+                    <div style="margin-top:16px">
+                        <button class="btn" style="padding:10px 20px; font-family:var(--font-body);">READ SUMMARY</button>
+                    </div>
+                </div>
+                <div class="game-panel-image" id="image-empathy-container">
+                    <img id="image-empathy" src="empathy.jpg" alt="Image of empathy guide" loading="lazy" style="display:block;">
+                </div>
+            </div>
+
+            <div class="game-panel reveal" onclick="openDemo('Adult Allies Portal')">
+                <div class="game-panel-content">
+                    <h3 class="text-2xl" style="color:var(--accent1); font-family:var(--font-heading);">HOW TO AVOID BULLYING AND WHY IT HAPPENS: TIPS FROM OUR TEDx SPEAKERS</h3>
+                    <p class="muted" style="color:var(--muted); font-family:var(--font-body);">Tips from our TEDx speakers, Vedant(our Dev too!) and Nived on how to confront bullying.</p>
+                    <div style="margin-top:16px">
+                        <button class="btn" style="padding:10px 20px; font-family:var(--font-body);">ACCESS DOCUMENT</button>
+                    </div>
+                    </div>
+                    <div class="game-panel-image" id="image-allies-container">
+                        <img id="image-allies" src="parents.jpg" alt="Image of adult allies portal" loading="lazy" style="display:block;">
+                </div>
+            </div>
+
+            <div class="game-panel reveal" onclick="openDemo('Resilience Exercises')">
+                <div class="game-panel-content">
+                    <h3 class="text-2xl" style="color:var(--accent1); font-family:var(--font-heading);">THE RESILIENCE TOOLKIT: MENTAL WELLNESS</h3>
+                    <p class="muted" style="color:var(--muted); font-family:var(--font-body);">A collection of exercises, like 5-4-3-2-1 grounding and positive self-talk scripting, to build and maintain emotional strength during challenging times.</p>
+                    <div style="margin-top:16px">
+                        <button class="btn-ghost" style="padding:10px 20px; font-family:var(--font-body);">VIEW EXERCISES</button>
+                    </div>
+                </div>
+                <div class="game-panel-image" id="image-resilience-container">
+                    <img id="image-resilience" src="mental.jpg" alt="Image of resilience exercises" loading="lazy" style="display:block;">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="pledge" class="section reveal" style="border-color: var(--accent2);">
+        <h2>TAKE THE 7E PLEDGE</h2>
+        <p class="muted max-w-3xl" style="color:var(--muted); font-family:var(--font-body);">Join the movement. Your personal commitment to kindness and action is what drives our platform's success and creates a safer space for everyone.</p>
+
+        <div class="pledge-card panel reveal" style="max-width:650px; margin:30px auto; text-align:center; border-color:var(--accent2);">
+            <h3 class="text-3xl font-extrabold" style="color:var(--accent2); margin-bottom:15px; font-family:var(--font-heading);">I PLEDGE TO BE KIND. I PLEDGE TO ACT.</h3>
+            <p class="muted text-lg" style="color:var(--muted); font-family:var(--font-body);">I promise to stand up, speak out, and show empathy. I will not be a silent bystander, but an active ally in building a kinder community for all.</p>
+            <button class="btn" style="margin-top:24px; font-family:var(--font-body);" onclick="openPledgeModal()">SUBMIT YOUR PERSONAL PLEDGE</button>
+            <div style="margin-top:15px; font-size:1rem; color:var(--muted); font-family:var(--font-body);">
+                <span id="currentPledgeCount" style="font-weight:700; color:var(--accent1); text-shadow:0 0 10px var(--accent1);">0</span> individuals have taken the commitment so far.
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="section reveal" style="border-color: var(--accent1);">
+    <h2>SUPPORTER TESTIMONIALS</h2>
+    <div class="reviews-container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:20px;">
+        <div class="review-card reveal panel" style="border-color: var(--accent1);">
+            <h4 class="font-bold text-xl" style="color:var(--accent1); font-family:var(--font-heading);">Nived N</h4>
+            <p style="color:var(--text-color); font-family:var(--font-body);">“7E Hub gave me the courage to talk about what was happening. I felt truly heard and supported through the tools.”</p>
+            <div style="color:var(--muted); font-size:0.9rem; font-family:var(--font-body);">— SAFE SPACE USER</div>
+        </div>
+        <div class="review-card reveal panel" style="border-color: var(--accent1);">
+            <h4 class="font-bold text-xl" style="color:var(--accent1); font-family:var(--font-heading);">Vedant S.</h4>
+            <p style="color:var(--text-color); font-family:var(--font-body);">“The Empathy Guide helped me understand how to be a better friend to someone struggling. It changed my approach entirely.”</p>
+            <div style="color:var(--muted); font-size:0.9rem; font-family:var(--font-body);">— EMPOWERMENT SUPPORTER</div>
+        </div>
+        <div class="review-card reveal panel" style="border-color: var(--accent1);">
+            <h4 class="font-bold text-xl" style="color:var(--accent1); font-family:var(--font-heading);">KSHITHIJ</h4>
+            <p style="color:var(--text-color); font-family:var(--font-body);">“The Resilience Toolkit made a difficult time clear and easy to follow. It provided necessary mental strength.”</p>
+            <div style="color:var(--muted); font-size:0.9rem; font-family:var(--font-body);">— INVALUABLE TOOL</div>
+        </div>
+        <div class="review-card reveal panel" style="border-color: var(--accent1);">
+            <h4 class="font-bold text-xl" style="color:var(--accent1); font-family:var(--font-heading);"></h4>
+            <p style="color:var(--text-color); font-family:var(--font-body);">“It's amazing how much difference a simple daily affirmation can make when you're feeling isolated.”</p>
+            <div style="color:var(--muted); font-size:0.9rem; font-family:var(--font-body);">— POSITIVE IMPACT</div>
+        </div>
+    </div>
+    </section>
+
+    <section id="faq" class="section reveal" style="border-color: var(--accent2);">
+        <h2>FREQUENTLY ASKED QUESTIONS</h2>
+        <div class="faq max-w-4xl mx-auto" role="list" style="margin-top:20px;">
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false" style="width:100%; text-align:left; padding:18px 0; background:none; border:none; color:var(--accent2); font-size:1.1rem; font-weight:700; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid rgba(255, 0, 255, 0.5); font-family:var(--font-body);"><span style="color:var(--accent2);">How can I find support if I feel isolated?</span> <span style="font-size:1.5rem; transform:rotate(0); transition:transform 0.3s; color:var(--accent2);">+</span></button>
+                <div class="panel" style="color:var(--muted); font-family:var(--font-body);">Our platform is designed to provide **tools for resilience and connection**. Utilize the **Resilience Toolkit** for immediate techniques, and remember to speak to a trusted adult.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false" style="width:100%; text-align:left; padding:18px 0; background:none; border:none; color:var(--accent2); font-size:1.1rem; font-weight:700; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid rgba(255, 0, 255, 0.5); font-family:var(--font-body);"><span style="color:var(--accent2);">Is 7E Hub an official crisis intervention service?</span> <span style="font-size:1.5rem; transform:rotate(0); transition:transform 0.3s; color:var(--accent2);">+</span></button>
+                <div class="panel" style="color:var(--muted); font-family:var(--font-body);">No, **7E Hub is a resource and empowerment platform**. If you are in immediate danger, please contact your local emergency services or a dedicated crisis hotline.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" aria-expanded="false" style="width:100%; text-align:left; padding:18px 0; background:none; border:none; color:var(--accent2); font-size:1.1rem; font-weight:700; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid rgba(255, 0, 255, 0.5); font-family:var(--font-body);"><span style="color:var(--accent2);">How is 7E Hub funded and maintained?</span> <span style="font-size:1.5rem; transform:rotate(0); transition:transform 0.3s; color:var(--accent2);">+</span></button>
+                <div class="panel" style="color:var(--muted); font-family:var(--font-body);">7E Hub is supported by **educational grants, ethical corporate sponsorships, and private donations**. We are a non-profit initiative dedicated to our mission of promoting kindness and resilience.</div>
+            </div>
+
+            <div class="faq-item"><button class="faq-question" aria-expanded="false" style="width:100%; text-align:left; padding:18px 0; background:none; border:none; color:var(--accent2); font-size:1.1rem; font-weight:700; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid rgba(255, 0, 255, 0.5); font-family:var(--font-body);"><span style="color:var(--accent2);">What does 7E stand for?</span> <span style="font-size:1.5rem; transform:rotate(0); transition:transform 0.3s; color:var(--accent2);">+</span></button><div class="panel" style="color:var(--muted); font-family:var(--font-body);">The seven Es: **Engage, Empower, Empathize, Educate, Embrace, Encourage, and End Bullying**.</div></div>
+            <div class="faq-item"><button class="faq-question" aria-expanded="false" style="width:100%; text-align:left; padding:18px 0; background:none; border:none; color:var(--accent2); font-size:1.1rem; font-weight:700; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid rgba(255, 0, 255, 0.5); font-family:var(--font-body);"><span style="color:var(--accent2);">Can parents and educators access resources?</span> <span style="font-size:1.5rem; transform:rotate(0); transition:transform 0.3s; color:var(--accent2);">+</span></button><div class="panel" style="color:var(--muted); font-family:var(--font-body);">Yes — the **Adult Allies Portal** is specifically designed with tools and guides for parents and educators to support their children and students.</div></div>
+        </div>
+    </section>
+
+    <footer role="contentinfo" style="padding:40px 8%;background:#000000;border-top:3px solid var(--accent1);margin-top:18px; position: relative; z-index: 10;">
+        <div style="max-width:var(--max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="font-family:var(--font-heading); font-weight:700; color:var(--accent1);">© 2025 7E HUB — BUILDING A KINDER WORLD.</div>
+            <div style="color:#a0a0a0;font-size:13px; font-family:var(--font-body);">CONFIDENTIALITY ASSURED • SAFE SPACE • BUILT FOR YOU</div>
+        </div>
+    </footer>
+
+    <div id="demoModal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.9)" onclick="closeDemo()"></div>
+        <div style="width:92%;max-width:1000px;background:var(--box-bg-color);border-radius:12px;padding:24px;border:2px solid var(--accent1);position:relative;z-index:121;max-height:90vh;overflow-y:auto; font-family:var(--font-body); box-shadow:0 0 20px rgba(0, 255, 255, 0.5);">
+            <button style="position:absolute;right:18px;top:18px;padding:8px 12px;border-radius:4px;background:var(--accent1);border:0;color:#000;font-size:0.9rem; font-family:var(--font-body); z-index:10;" onclick="closeDemo()">CLOSE (ESC)</button>
+            <div id="demoContent" style="min-height:260px;padding-top:20px; color:var(--text-color);"></div>
+        </div>
+    </div>
+    
+    <div id="pledgeModal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.9)" onclick="closePledgeModal()"></div>
+        <div class="panel" style="width:90%;max-width:500px;position:relative;z-index:121;text-align:center; font-family:var(--font-body); border-color:var(--accent2);">
+            <h3 class="text-2xl" style="color:var(--accent2); margin-bottom:10px; font-family:var(--font-heading);">YOUR KINDNESS PLEDGE</h3>
+            <p class="muted" style="margin-bottom:20px; color:var(--muted);">What action do you pledge to take to make the world a kinder place?</p>
+
+            <textarea id="pledgeInput" placeholder="E.g., I pledge to check in on a friend who seems isolated." 
+                style="width:100%; height:100px; padding:12px; background:#111; border:1px solid var(--accent1); border-radius:4px; color:var(--text-color); resize:vertical; outline:none; font-family:var(--font-body);"
+                maxlength="200"></textarea>
+            
+            <p class="small muted" style="text-align:right; margin-top:5px; color:var(--muted);"><span id="pledgeCharCount">200</span> CHARACTERS LEFT</p>
+
+            <button class="btn" style="margin-top:15px; width:100%; font-family:var(--font-body);" onclick="submitPledge()">COMMIT PLEDGE</button>
+            <button class="btn-ghost" style="margin-top:10px; width:100%; font-family:var(--font-body);" onclick="closePledgeModal()">CANCEL</button>
+        </div>
+    </div>
+
+    <script>
+        // ----------------------------
+        // UTILITIES & CORE LOGIC
+        // ----------------------------
+        
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function openPledgeModal() {
+            const modal = document.getElementById('pledgeModal');
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden','false');
+            document.getElementById('pledgeInput').value = '';
+            document.getElementById('pledgeCharCount').textContent = '200';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => document.getElementById('pledgeInput').focus(), 100);
+        }
+
+        function closePledgeModal() {
+            const modal = document.getElementById('pledgeModal');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden','true');
+            document.body.style.overflow = '';
+        }
+
+        function closeDemo(){
+            const modal = document.getElementById('demoModal');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden','true');
+            document.getElementById('demoContent').innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
+        function openDemo(name){
+            const modal = document.getElementById('demoModal');
+            const content = document.getElementById('demoContent');
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden','false');
+
+            let contentHTML = '';
+            let title = name;
+
+            // --- ELONGATED GUIDE CONTENT START --- 
+            if (name === 'Empathy Guide') {
+                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title.toUpperCase()}: 3 STEPS TO EMPATHETIC INTERVENTION</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">Empathy is the key to defusing conflict and transitioning from bystander to ally. This guide outlines how to approach a situation with understanding and constructive action.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">1. RECOGNIZE AND PAUSE</h4><p class="text-gray-300">Before reacting, pause. Acknowledge the emotional temperature of the room. This prevents escalation and grounds your response in reason, not emotion.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">2. VALIDATE THE FEELING, NOT THE ACTION</h4><p class="text-gray-300">Tell the person, "I see you are upset," or "That sounds frustrating." Validate their feelings, but be clear that disrespectful actions are not acceptable.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">3. REDIRECT TO A SOLUTION</h4><p class="text-gray-300">Guide the conversation toward a positive outcome. Ask, "How can we solve this together?" or "What do you need right now?" Focus on next steps.</p><div class="mt-8 text-center"><button class="btn" onclick="closeDemo()" style="font-family:var(--font-body);">APPLY THESE STEPS</button></div>`;
+            } else if (name === 'Resilience Exercises') {
+                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title.toUpperCase()}: BUILDING YOUR INNER STRENGTH</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">Resilience is a learned skill. Use these quick exercises daily to build emotional stability and mental toughness.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">1. 5-4-3-2-1 GROUNDING TECHNIQUE (1 MINUTE)</h4><p class="text-gray-300">A sensory exercise to pull you into the present moment when stress hits:</p><ul class="list-disc list-inside text-gray-300 mt-3 pl-4"><li>**5** things you can **SEE**.</li><li>**4** things you can **FEEL** (texture, temperature).</li><li>**3** things you can **HEAR**.</li><li>**2** things you can **SMELL**.</li><li>**1** thing you can **TASTE**.</li></ul><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">2. POSITIVE SELF-TALK SCRIPTING (2 MINUTES)</h4><p class="text-gray-300">Negative internal dialog is common. Counter it with prepared, positive affirmations:</p><div class="text-lg text-white font-mono mt-3 bg-gray-800 p-4 rounded-lg border border-cyan-500/50">"I AM CAPABLE. THIS FEELING IS TEMPORARY. I HAVE PEOPLE WHO SUPPORT ME. I AM STRONG ENOUGH TO HANDLE THIS."</div><div class="mt-8 text-center"><button class="btn" onclick="closeDemo()" style="font-family:var(--font-body);">START EXERCISE</button></div>`;
+            } else if (name === 'Adult Allies Portal') {
+                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title.toUpperCase()}: GUIDANCE FOR PARENTS & EDUCATORS</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">Your role is critical. The Allies Portal provides tools to support, guide, and protect the children and students in your care, fostering a culture of zero tolerance.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">OPENING DIFFICULT CONVERSATIONS</h4><p class="text-gray-300">Start with gentle, open-ended questions like, "I've noticed you seem quiet lately. How are things really going?" Avoid jumping straight to accusations or solutions.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">RECOGNIZING WARNING SIGNS</h4><p class="text-gray-300">Look for changes in behavior (sleeping habits, eating patterns, grades) or unexplained physical complaints. These are often indicators of distress. Seek professional help if signs persist.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">CREATING A SUPPORTIVE ENVIRONMENT</h4><p class="text-gray-300">Ensure every student or child knows exactly who they can talk to and what the protocol is for reporting incidents, guaranteeing confidentiality and swift action.</p><div class="mt-8 text-center"><button class="btn" onclick="closeDemo()" style="font-family:var(--font-body);">VIEW FULL GUIDE</button></div>`;
+            }
+
+            content.innerHTML = contentHTML;
+            document.body.style.overflow = 'hidden';
+        }
+        
+        const PLEDGE_KEY = '7E_pledge_count';
+        const INITIAL_PLEDGE_COUNT = 50000;
+        let currentPledges = parseInt(localStorage.getItem(PLEDGE_KEY) || INITIAL_PLEDGE_COUNT, 10);
+
+        function updatePledgeDisplay() {
+            const counterEl = document.getElementById('pledgeCounter');
+            const currentCountEl = document.getElementById('currentPledgeCount');
+            if (counterEl) counterEl.textContent = currentPledges.toLocaleString();
+            if (currentCountEl) currentCountEl.textContent = currentPledges.toLocaleString();
+        }
+
+        function submitPledge() {
+            const input = document.getElementById('pledgeInput');
+            if (input.value.trim().length < 10) {
+                showTempMessage("PLEDGE MUST BE AT LEAST 10 CHARACTERS LONG!", '#ff4444');
+                return;
+            }
+
+            closePledgeModal();
+            currentPledges += 1; 
+            localStorage.setItem(PLEDGE_KEY, currentPledges);
+            updatePledgeDisplay();
+
+            showTempMessage("THANK YOU! YOUR PLEDGE HAS BEEN REGISTERED.", 'var(--accent1)');
+        }
+
+        function setupPledgeInput() {
+            const input = document.getElementById('pledgeInput');
+            const counter = document.getElementById('pledgeCharCount');
+            if (input && counter) {
+                input.addEventListener('input', () => {
+                    const remaining = 200 - input.value.length;
+                    counter.textContent = remaining;
+                });
+            }
+        }
+        
+        function showTempMessage(message, color) {
+            let msgEl = document.getElementById('tempMessage');
+            if (!msgEl) {
+                msgEl = document.createElement('div');
+                msgEl.id = 'tempMessage';
+                msgEl.style.cssText = 'position:fixed; bottom:20px; right:20px; background:'+color+'; color:black; padding:15px 25px; border-radius:4px; z-index:150; opacity:0; transition:opacity 0.4s ease-out, transform 0.4s ease-out; transform:translateY(20px); font-weight:600; box-shadow:0 6px 15px rgba(0,0,0,0.3); font-family:var(--font-body);';
+                document.body.appendChild(msgEl);
+            }
+            msgEl.style.backgroundColor = color;
+            msgEl.textContent = message;
+            msgEl.style.opacity = '1';
+            msgEl.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                msgEl.style.opacity = '0';
+                msgEl.style.transform = 'translateY(20px)';
+                setTimeout(() => msgEl.remove(), 500); 
+            }, 3000);
+        }
+
+        const challenges = [
+            { q: "DAILY AFFIRMATION: **YOU ARE STRONG.** YOUR VOICE MATTERS.", a: "SPEAK UP, YOU ARE NEVER ALONE." },
+            { q: "DAILY AFFIRMATION: **CHOOSE KINDNESS.** YOU HAVE THE POWER TO CHANGE SOMEONE'S DAY.", a: "KINDNESS IS A STRENGTH, NOT A WEAKNESS." },
+            { q: "DAILY AFFIRMATION: **EMPATHY IS SEEING WITH THE EYES OF ANOTHER.**", a: "TRY TO UNDERSTAND, EVEN WHEN IT'S HARD." },
+            { q: "DAILY AFFIRMATION: **YOUR WORTH IS DEFINED BY YOU, NOT OTHERS.**", a: "BELIEVE IN YOURSELF, ALWAYS." },
+            { q: "DAILY AFFIRMATION: **REACH OUT.** THERE IS ALWAYS SOMEONE WHO CARES AND WANTS TO HELP.", a: "HELP IS AVAILABLE 24/7." }
+        ];
+        let currentChallengeIndex = 0;
+        let isShowingQuestion = true;
+        let cycleInterval;
+
+        function cycleChallenge() {
+            const questionEl = document.getElementById('challengeQuestion');
+            const challengeBar = document.getElementById('dynamicChallenge');
+            if (!questionEl || !challengeBar) return;
+
+            const btn = challengeBar.querySelector('.btn-min');
+
+            if (isShowingQuestion) {
+                const currentQ = challenges[currentChallengeIndex].q;
+                questionEl.innerHTML = currentQ.replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-extrabold" style="color:var(--text-color);">$1</span>'); 
+                btn.textContent = 'ACTION';
+            } else {
+                const currentA = challenges[currentChallengeIndex].a;
+                questionEl.innerHTML = '<span class="muted" style="color:var(--accent1);font-weight:700;">TAKE ACTION: </span>' + currentA;
+                btn.textContent = 'NEXT';
+                currentChallengeIndex = (currentChallengeIndex + 1) % challenges.length;
+            }
+            isShowingQuestion = !isShowingQuestion;
+        }
+
+        function startDynamicChallenge() {
+            cycleInterval = setInterval(cycleChallenge, 7000);
+            cycleChallenge();
+        }
+        
+        function handleChallengeClick(e) {
+            if (e) e.stopPropagation(); 
+            clearInterval(cycleInterval);
+            cycleChallenge();
+            cycleInterval = setInterval(cycleChallenge, 7000);
+        }
+
+        // --- UPDATED FLOATING COMPLIMENTS LOGIC FOR DIAGONAL GLIDE AND MORE WORDS ---
+        (function randomizeCompliments() {
+            const container = document.querySelector('.floating-compliments');
+            const totalCompliments = 70; 
+            const compliments = [
+                "KINDNESS", "STRONG", "EMPATHY", "ALLY", "VALUABLE", 
+                "BRAVE", "HEARD", "SEEN", "WORTHY", "RESILIENT",
+                "SAFE", "LOVE", "SUPPORT", "HOPE", "ACTION", "VOICE",
+                "GROW", "TRUST", "VALUE", "SHINE", "POWER", "CARE", "HEAL",
+                "PEACE", "TRUTH"
+            ];
+
+            for (let i = 0; i < totalCompliments; i++) {
+                const complimentText = compliments[Math.floor(Math.random() * compliments.length)];
+                let div = document.createElement('div');
+                div.textContent = complimentText;
+                
+                // Random start position within viewport
+                const startX = Math.random() * 100;
+                const startY = Math.random() * 100;
+
+                // Random end position (offset from start for movement)
+                const movementRange = 30; // Max movement in % of viewport
+                const endX = startX + (Math.random() * movementRange - movementRange / 2);
+                const endY = startY + (Math.random() * movementRange - movementRange / 2);
+
+                div.style.left = `${startX}vw`;
+                div.style.top = `${startY}vh`;
+                
+                div.style.setProperty('--x-start', '0');
+                div.style.setProperty('--y-start', '0');
+                div.style.setProperty('--x-end', `${(endX - startX)}vw`);
+                div.style.setProperty('--y-end', `${(endY - startY)}vh`);
+                
+                div.style.animationDuration = `${Math.random() * 10 + 20}s`; 
+                div.style.animationDelay = `-${Math.random() * 30}s`;
+
+                container.appendChild(div);
+            }
+        })();
+        // --- END UPDATED LOGIC ---
+
+
+        (function setupInteractions(){
+            // Scroll Reveal Logic
+            const revealObserver = new IntersectionObserver((entries)=>{
+                entries.forEach(e=>{
+                    if(e.isIntersecting) { 
+                        e.target.classList.add('visible'); 
+                        revealObserver.unobserve(e.target);
+                    }
+                });
+            },{threshold:0.18});
+            document.querySelectorAll('.reveal').forEach(el=> revealObserver.observe(el));
+
+            // Counter Animation Logic
+            document.querySelectorAll('.counter').forEach(el=>{
+                const target = +el.dataset.target || 0;
+                let started = false;
+                const counterIo = new IntersectionObserver((entries)=>{
+                    entries.forEach(e=>{
+                        if(e.isIntersecting && !started){
+                            started=true;
+                            let cur=0;
+                            const step = ()=> {
+                                cur += Math.ceil(target/120);
+                                const text = (el.dataset.target && el.dataset.target.indexOf('%')>-1) ? `${cur}%` : cur.toLocaleString();
+
+                                if(cur>=target){ 
+                                    el.textContent = (el.dataset.target && el.dataset.target.indexOf('%')>-1) ? el.dataset.target : target.toLocaleString(); 
+                                }
+                                else { 
+                                    el.textContent = text;
+                                    requestAnimationFrame(step); 
+                                }
+                            };
+                            step();
+                            counterIo.unobserve(el);
+                        }
+                    });
+                },{threshold:0.6});
+                counterIo.observe(el);
+            });
+
+            // FAQ Accordion Logic
+            document.querySelectorAll('.faq-question').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const parent = btn.parentElement;
+                    const isOpen = parent.classList.contains('open');
+
+                    document.querySelectorAll('.faq-item.open').forEach(el => {
+                        if (el !== parent) { 
+                            el.classList.remove('open');
+                            const qBtn = el.querySelector('.faq-question');
+                            if (qBtn) qBtn.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    if (!isOpen) {
+                        parent.classList.add('open');
+                        btn.setAttribute('aria-expanded', 'true');
+                    } else {
+                        parent.classList.remove('open');
+                        btn.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+
+            // Keyboard Shortcuts
+            document.addEventListener('keydown', (e)=>{
+                if(e.key==='r' || e.key==='R') scrollToSection('resources');
+                if(e.key==='p' || e.key==='P') scrollToSection('pledge');
+                if(e.key==='t' || e.key==='T') scrollToSection('testimonials');
+                if(e.key==='f' || e.key==='F') scrollToSection('faq');
+                if(e.key==='Escape') { 
+                    closeDemo(); 
+                    closePledgeModal();
+                }
+            });
+        })();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startDynamicChallenge();
+            updatePledgeDisplay();
+            setupPledgeInput();
+        });
+    </script>
+</body>
+</html>
