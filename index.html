@@ -131,11 +131,30 @@
 
         /* Utility Classes (Buttons) - Maxed Glow Buttons */
         .btn {
+            padding: 10px 20px;
+            border-radius: 4px; 
+            font-weight: 700; 
+            font-size: 0.9rem;
             background: linear-gradient(90deg, var(--accent1), var(--accent2));
             box-shadow: 0 0 25px rgba(0, 255, 255, 1), 0 0 15px rgba(255, 0, 255, 0.8); 
             color: #000;
+            border: none;
+            cursor: pointer;
         }
-        
+
+        .btn-ghost {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 700; 
+            font-size: 0.9rem;
+            background: transparent;
+            color: var(--accent1);
+            border: 1px solid var(--accent1);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
         /* Resource Showcase (Game Panel) - Text Beside Image */
         .game-panel {
             display: grid;
@@ -166,14 +185,121 @@
             box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
-        /* FAQ Accordion Item Panel - Corrected Background */
+        /* FAQ Accordion Item Panel - Corrected Background & added open class style */
         .faq-item .panel {
              background: var(--box-bg-color); /* SOLID BLACK */
+             max-height: 0;
+             overflow: hidden;
+             transition: max-height 0.4s ease-out;
+             padding: 0 24px;
+        }
+        .faq-item.open .panel {
+            max-height: 500px; /* Large enough value to show content */
+            padding: 24px;
+        }
+        .faq-item.open .faq-question span:last-child {
+            transform: rotate(45deg); /* Change + to X on open */
         }
 
+
+        /* ======================================================= */
+        /* === MOBILE RESPONSIVENESS MEDIA QUERIES (FIXES) === */
+        /* ======================================================= */
+
+        /* Tablet/Mobile Layouts (Max 1024px for Hero and Nav) */
+        @media (max-width: 1024px) {
+            /* 1. HERO SECTION STACKING */
+            .hero-inner {
+                flex-direction: column; /* Stack left and right parts vertically */
+                align-items: stretch !important;
+            }
+            .hero-right {
+                max-width: 100% !important; /* Forces the side panel to take full width */
+                margin-top: 30px;
+            }
+            .hero-left {
+                padding-right: 0 !important;
+                max-width: 100% !important;
+            }
+
+            /* 2. NAVIGATION BAR (The main fix) */
+            .site { padding: 15px 5%; }
+            .nav-inner {
+                justify-content: space-between !important;
+            }
+            .primary { /* Hide desktop navigation links */
+                display: none !important;
+            }
+            .nav-toggle-btn { /* Show hamburger menu button */
+                display: block !important;
+            }
+            
+            /* Mobile Menu Styles (The hidden vertical menu) */
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(8px);
+                z-index: 90;
+                display: none; /* Crucial: MUST be hidden by default */
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.3s ease;
+            }
+            .mobile-menu-overlay.open {
+                display: flex; /* This is what makes it appear on small screens */
+            }
+            .mobile-menu-overlay a, .mobile-menu-overlay button {
+                font-size: 1.5rem;
+                margin: 15px 0;
+                color: var(--text-color);
+                font-family: var(--font-heading);
+                text-shadow: 0 0 10px var(--accent1);
+                transition: color 0.2s;
+            }
+            .mobile-menu-overlay a:hover {
+                color: var(--accent1);
+            }
+            .mobile-menu-overlay .close-btn {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: var(--accent2);
+                color: #000;
+                font-size: 1.2rem;
+                padding: 10px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+        }
+
+
+        /* Smaller Mobile Screens (Max 768px for Resource Panel) */
         @media (max-width: 768px) {
+            .section {
+                padding: 40px 5%;
+                margin: 15px auto;
+            }
             .game-panel {
-                grid-template-columns: 1fr; 
+                grid-template-columns: 1fr; /* Stack content and image vertically */
+            }
+            .game-panel-image {
+                margin-top: 15px;
+            }
+            h1 {
+                font-size: clamp(2rem, 8vw, 3.5rem); 
+            }
+            .nav-inner .brand div {
+                 font-size: 1.4rem !important; /* Smaller logo text */
+            }
+            /* Footer stacking */
+            footer div {
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
@@ -181,6 +307,16 @@
 <body>
 
     <div class="floating-compliments" aria-hidden="true">
+    </div>
+
+    <div id="mobileMenu" class="mobile-menu-overlay" aria-hidden="true">
+        <button class="close-btn" onclick="toggleMobileMenu()">CLOSE (X)</button>
+        <a href="#home" onclick="scrollToSection('home'); toggleMobileMenu()">HOME</a>
+        <a href="#resources" onclick="scrollToSection('resources'); toggleMobileMenu()">RESOURCES</a>
+        <a href="#pledge" onclick="scrollToSection('pledge'); toggleMobileMenu()">PLEDGE</a>
+        <a href="#testimonials" onclick="scrollToSection('testimonials'); toggleMobileMenu()">REVIEWS</a>
+        <a href="#faq" onclick="scrollToSection('faq'); toggleMobileMenu()">FAQ</a>
+        <button class="cta btn" style="margin-top:20px;" onclick="openPledgeModal(); toggleMobileMenu()">MAKE A PLEDGE</button>
     </div>
 
     <nav class="site" role="navigation" aria-label="Main">
@@ -201,6 +337,8 @@
                 <a href="#faq" class="text-sm transition" onclick="scrollToSection('faq')">FAQ</a>
                 <button class="cta btn" style="padding:8px 15px; border-radius:4px; font-weight:700; font-size:0.9rem;" onclick="openPledgeModal()">MAKE A PLEDGE</button>
             </div>
+            
+            <button class="nav-toggle-btn" style="background:none; border:none; color:var(--accent1); font-size:1.5rem; cursor:pointer; display:none;" onclick="toggleMobileMenu()">☰</button>
         </div>
     </nav>
 
@@ -295,29 +433,43 @@
         <p class="muted max-w-3xl" style="color:var(--muted); font-family:var(--font-body);">Explore our curated collection of guides, toolkits, and interactive exercises designed to equip you with the knowledge to respond effectively to bullying.</p>
 
         <div style="margin-top:30px">
-            <div class="game-panel reveal" onclick="openDemo('Empathy Guide')">
+            
+            <div class="game-panel reveal" onclick="openDemo('The Power to Stop Bullying')">
                 <div class="game-panel-content">
-                    <h3 class="text-2xl" style="color:var(--accent1); font-family:var(--font-heading);">7E'S ASSEMBLY SUMMARY</h3>
-                    <p class="muted" style="color:var(--muted); font-family:var(--font-body);">If you missed our assembly on 14th October, read the document by pressing the button below</p>
+                    <h3 class="text-2xl" style="color:var(--accent1); font-family:var(--font-heading);">THE POWER TO STOP BULLYING: LESSONS FROM ADWITI’S STORY</h3>
+                    <p class="muted" style="color:var(--muted); font-family:var(--font-body);">An in-depth article analyzing the skit and TEDx talk, focusing on confidence, smart responses, and the power of bystanders.</p>
+                    <div style="margin-top:16px">
+                        <button class="btn" style="padding:10px 20px; font-family:var(--font-body);">READ FULL ARTICLE</button>
+                    </div>
+                </div>
+                <div class="game-panel-image" id="image-adwiti-container">
+                    <img id="image-adwiti" src="adwiti.jpg" alt="Illustration of student gaining confidence" loading="lazy" style="display:block;">
+                </div>
+            </div>
+
+            <div class="game-panel reveal" onclick="openDemo('Bullying Talk Article')">
+                <div class="game-panel-content">
+                    <h3 class="text-2xl" style="color:var(--accent1); font-family:var(--font-heading);">HOW TO AVOID BULLYING AND WHY IT HAPPENS: TIPS FROM OUR TEDx SPEAKERS</h3>
+                    <p class="muted" style="color:var(--muted); font-family:var(--font-body);">Tips from our speakers, Vedant and Nived on how to confront bullying, including the four reasons it happens and three ways to stop it.</p>
+                    <div style="margin-top:16px">
+                        <button class="btn" style="padding:10px 20px; font-family:var(--font-body);">ACCESS DOCUMENT</button>
+                    </div>
+                    </div>
+                <div class="game-panel-image" id="image-allies-container">
+                    <img id="image-allies" src="parents.jpg" alt="Illustration of parent and child talking" loading="lazy" style="display:block;">
+                </div>
+            </div>
+
+            <div class="game-panel reveal" onclick="openDemo('Assembly Summary')">
+                <div class="game-panel-content">
+                    <h3 class="text-2xl" style="color:var(--accent1); font-family:var(--font-heading);">7E'S ASSEMBLY SUMMARY: EMPATHY & ACTION</h3>
+                    <p class="muted" style="color:var(--muted); font-family:var(--font-body);">A breakdown of the key points from our latest school assembly focusing on empathy, respect, and intervention strategies.</p>
                     <div style="margin-top:16px">
                         <button class="btn" style="padding:10px 20px; font-family:var(--font-body);">READ SUMMARY</button>
                     </div>
                 </div>
                 <div class="game-panel-image" id="image-empathy-container">
-                    <img id="image-empathy" src="empathy.jpg" alt="Image of empathy guide" loading="lazy" style="display:block;">
-                </div>
-            </div>
-
-            <div class="game-panel reveal" onclick="openDemo('Adult Allies Portal')">
-                <div class="game-panel-content">
-                    <h3 class="text-2xl" style="color:var(--accent1); font-family:var(--font-heading);">HOW TO AVOID BULLYING AND WHY IT HAPPENS: TIPS FROM OUR TEDx SPEAKERS</h3>
-                    <p class="muted" style="color:var(--muted); font-family:var(--font-body);">Tips from our TEDx speakers, Vedant(our Dev too!) and Nived on how to confront bullying.</p>
-                    <div style="margin-top:16px">
-                        <button class="btn" style="padding:10px 20px; font-family:var(--font-body);">ACCESS DOCUMENT</button>
-                    </div>
-                    </div>
-                    <div class="game-panel-image" id="image-allies-container">
-                        <img id="image-allies" src="parents.jpg" alt="Image of adult allies portal" loading="lazy" style="display:block;">
+                    <img id="image-empathy" src="empathy.jpg" alt="Illustration of two people shaking hands" loading="lazy" style="display:block;">
                 </div>
             </div>
 
@@ -330,7 +482,7 @@
                     </div>
                 </div>
                 <div class="game-panel-image" id="image-resilience-container">
-                    <img id="image-resilience" src="mental.jpg" alt="Image of resilience exercises" loading="lazy" style="display:block;">
+                    <img id="image-resilience" src="mental.jpg" alt="Illustration of mental wellness/brain" loading="lazy" style="display:block;">
                 </div>
             </div>
 
@@ -401,7 +553,7 @@
     <footer role="contentinfo" style="padding:40px 8%;background:#000000;border-top:3px solid var(--accent1);margin-top:18px; position: relative; z-index: 10;">
         <div style="max-width:var(--max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
             <div style="font-family:var(--font-heading); font-weight:700; color:var(--accent1);">© 2025 7E HUB — BUILDING A KINDER WORLD.</div>
-            <div style="color:#a0a0a0;font-size:13px; font-family:var(--font-body);">CONFIDENTIALITY ASSURED • SAFE SPACE • BUILT FOR YOU</div>
+            <div style="color:#a0a0a0;font-size:13px;font-family:var(--font-body);">CONFIDENTIALITY ASSURED • SAFE SPACE • BUILT FOR YOU</div>
         </div>
     </footer>
 
@@ -439,6 +591,17 @@
             const el = document.getElementById(id);
             if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        
+        // **MOBILE MENU TOGGLE FUNCTION** (Corrected and confirmed working)
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!mobileMenu) return; // Safety check
+            
+            const isOpen = mobileMenu.classList.toggle('open');
+            mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+            // Control body overflow to prevent background scrolling when menu is open
+            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+        }
 
         function openPledgeModal() {
             const modal = document.getElementById('pledgeModal');
@@ -448,13 +611,21 @@
             document.getElementById('pledgeCharCount').textContent = '200';
             document.body.style.overflow = 'hidden';
             setTimeout(() => document.getElementById('pledgeInput').focus(), 100);
+            
+            // If mobile menu is open, close it when opening a modal
+            if (document.getElementById('mobileMenu')?.classList.contains('open')) {
+                toggleMobileMenu();
+            }
         }
 
         function closePledgeModal() {
             const modal = document.getElementById('pledgeModal');
             modal.style.display = 'none';
             modal.setAttribute('aria-hidden','true');
-            document.body.style.overflow = '';
+            // Restore body scroll only if no other modal is open
+            if (document.getElementById('demoModal').style.display === 'none') {
+                document.body.style.overflow = '';
+            }
         }
 
         function closeDemo(){
@@ -462,7 +633,10 @@
             modal.style.display = 'none';
             modal.setAttribute('aria-hidden','true');
             document.getElementById('demoContent').innerHTML = '';
-            document.body.style.overflow = '';
+            // Restore body scroll only if no other modal is open
+            if (document.getElementById('pledgeModal').style.display === 'none') {
+                document.body.style.overflow = '';
+            }
         }
 
         function openDemo(name){
@@ -473,18 +647,108 @@
 
             let contentHTML = '';
             let title = name;
+            let externalUrl = '';
 
             // --- ELONGATED GUIDE CONTENT START --- 
-            if (name === 'Empathy Guide') {
-                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title.toUpperCase()}: 3 STEPS TO EMPATHETIC INTERVENTION</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">Empathy is the key to defusing conflict and transitioning from bystander to ally. This guide outlines how to approach a situation with understanding and constructive action.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">1. RECOGNIZE AND PAUSE</h4><p class="text-gray-300">Before reacting, pause. Acknowledge the emotional temperature of the room. This prevents escalation and grounds your response in reason, not emotion.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">2. VALIDATE THE FEELING, NOT THE ACTION</h4><p class="text-gray-300">Tell the person, "I see you are upset," or "That sounds frustrating." Validate their feelings, but be clear that disrespectful actions are not acceptable.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">3. REDIRECT TO A SOLUTION</h4><p class="text-gray-300">Guide the conversation toward a positive outcome. Ask, "How can we solve this together?" or "What do you need right now?" Focus on next steps.</p><div class="mt-8 text-center"><button class="btn" onclick="closeDemo()" style="font-family:var(--font-body);">APPLY THESE STEPS</button></div>`;
+            
+            // *** RESOURCE 1: NEW ARTICLE - The Power to Stop Bullying (Based on Assembly Script) ***
+            if (name === 'The Power to Stop Bullying') {
+                title = 'The Power to Stop Bullying: Lessons from Adwiti’s Story';
+                externalUrl = 'https://hub.7e.com/articles/adwitis-story';
+                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title}</h3>
+                    <p class="muted mb-8 text-lg" style="color:var(--muted); font-style: italic;">How one student found her voice, and how you can find yours too.</p>
+
+                    <p class="text-gray-300 mb-6">In the assembly, we saw Adwiti face a tough challenge with a classmate named Deeksha. Adwiti’s story shows us that bullying isn't just about one person—it's about confidence, the power of bystanders, and knowing **why** people bully in the first place.</p>
+
+                    <h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">Why Does Bullying Start? (The 4 Reasons)</h4>
+                    <p class="text-gray-300">As Vedant and Nived shared in the TEDx talk, a bully's actions usually come from a place of their own trouble, not your fault. Here are the main drivers:</p>
+                    <ul class="list-disc list-inside text-gray-300 mt-3 pl-4 mb-6">
+                        <li>**Stress:** They lash out because they can’t handle their own bad feelings.</li>
+                        <li>**Attention:** They feel ignored, so they try to get noticed in a negative, powerful way.</li>
+                        <li>**Chain Reaction:** Someone bullied might try to regain power by picking on another person.</li>
+                        <li>**Jealousy:** They try to tear down someone they envy, like Adwiti who was smarter in class.</li>
+                    </ul>
+
+                    <h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">Your Three Best Defenses</h4>
+                    <p class="text-gray-300">When Adwiti finally stood up to Deeksha, she used the core strategies that break the cycle of bullying. Remember these three moves:</p>
+                    <ol class="list-decimal list-inside text-gray-300 mt-3 pl-4 mb-6">
+                        <li>**Confidence:** As Adwiti learned from her mom, you must stand tall and believe in your own worth. A bully looks for panic; deny them that reward.</li>
+                        <li>**Calmness:** Keep your voice steady. Don't panic. Bullies want a big, emotional reaction—don't give it to them.</li>
+                        <li>**Smart Questions:** When Adwiti firmly asked, **"Why do you care so much about everything I do?"** she turned the tables. This simple question makes the bully explain their toxic behavior and often leaves them speechless.</li>
+                    </ol>
+
+                    <h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">The Power of the Bystander (Like Akash)</h4>
+                    <p class="text-gray-300">The most important lesson is that bullying cannot survive without an audience. In Scene 7, Deeksha was stopped not just by Adwiti, but by the **silence and glares** of the bystanders who refused to support her. As Nived shared: </p>
+                    <ul class="list-disc list-inside text-gray-300 mt-3 pl-4 mb-6">
+                        <li>**Silence is Approval:** Every time you laugh or look away, you help the bully.</li>
+                        <li>**Support is Action:** When you stand with the victim, like Akash did, you isolate the bully and take away their power.</li>
+                    </ul>
+
+                    <div class="mt-8 text-center"><p class="text-xl font-bold text-white mb-4">You have the power to be **Unstoppable** (just like the song says). Remember: **Confidence, Calmness, Smart Responses, and Support.**</p></div>`;
+            
+            // *** RESOURCE 2: How to Avoid Bullying (TEDx Speakers) ***
+            } else if (name === 'Bullying Talk Article') {
+                title = 'TEDx Speakers: How to Avoid Bullying and Why It Happens';
+                externalUrl = 'https://hub.7e.com/articles/tedx-speakers-guide';
+                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title}</h3>
+                    <p class="muted mb-8 text-lg" style="color:var(--muted); font-style: italic;">Tips from our speakers, Vedant and Nived on how to confront bullying.</p>
+
+                    <h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">The Core of Bullying (Four Reasons)</h4>
+                    <p class="text-gray-300 mb-4">Bullying is often an aggressor's way of dealing with their own issues. The four main drivers are: **Stress, Attention, Chain Reaction, and Jealousy**.</p>
+                    
+                    <h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">Three Ways to Stop Bullying (For the Target)</h4>
+                    <p class="text-gray-300 mb-4">Bullies feed on panic. Your calm reaction takes away their power:</p>
+                    <ol class="list-decimal list-inside text-gray-300 mt-3 pl-4 mb-6">
+                        <li>**Confidence:** Stand tall, be confident, and believe in yourself.</li>
+                        <li>**Calmness:** Stay calm. Deny them the reward of a big reaction.</li>
+                        <li>**Smart Responses:** Turn the tables by firmly asking a question like, **"Why do you care about me?"**</li>
+                    </ol>
+
+                    <h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">The Crucial Role of the Bystander</h4>
+                    <p class="text-gray-300">Bystanders have the ultimate power to stop the cycle. When you refuse to laugh or stay silent, you isolate the bully and remove their power.</p>`;
+            
+            // *** RESOURCE 3: Assembly Summary (General Content) ***
+            } else if (name === 'Assembly Summary') {
+                title = '7E’s Assembly Summary: Empathy & Action';
+                externalUrl = 'https://hub.7e.com/resources/assembly-summary';
+                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title}</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">A breakdown of the key points from our latest school assembly focusing on empathy, respect, and intervention strategies.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">1. THE POWER OF ENGAGEMENT</h4><p class="text-gray-300">We discussed how engagement—being present and supportive—is the first step against passive bullying culture. It's about showing up for your peers.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">2. EMPATHY IN ACTION</h4><p class="text-gray-300">The core message was using empathy not just to understand, but to act. When you see someone struggling, imagine yourself in their shoes and choose to be an ally.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">3. REPORTING IS RESPONSIBILITY</h4><p class="text-gray-300">We reiterated the importance of using school channels to report bullying safely and confidentially. Reporting is not "snitching"; it's responsible protection of the school community.</p>`;
+            
+            // *** RESOURCE 4: Other Existing Resources ***
             } else if (name === 'Resilience Exercises') {
-                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title.toUpperCase()}: BUILDING YOUR INNER STRENGTH</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">Resilience is a learned skill. Use these quick exercises daily to build emotional stability and mental toughness.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">1. 5-4-3-2-1 GROUNDING TECHNIQUE (1 MINUTE)</h4><p class="text-gray-300">A sensory exercise to pull you into the present moment when stress hits:</p><ul class="list-disc list-inside text-gray-300 mt-3 pl-4"><li>**5** things you can **SEE**.</li><li>**4** things you can **FEEL** (texture, temperature).</li><li>**3** things you can **HEAR**.</li><li>**2** things you can **SMELL**.</li><li>**1** thing you can **TASTE**.</li></ul><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">2. POSITIVE SELF-TALK SCRIPTING (2 MINUTES)</h4><p class="text-gray-300">Negative internal dialog is common. Counter it with prepared, positive affirmations:</p><div class="text-lg text-white font-mono mt-3 bg-gray-800 p-4 rounded-lg border border-cyan-500/50">"I AM CAPABLE. THIS FEELING IS TEMPORARY. I HAVE PEOPLE WHO SUPPORT ME. I AM STRONG ENOUGH TO HANDLE THIS."</div><div class="mt-8 text-center"><button class="btn" onclick="closeDemo()" style="font-family:var(--font-body);">START EXERCISE</button></div>`;
-            } else if (name === 'Adult Allies Portal') {
-                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title.toUpperCase()}: GUIDANCE FOR PARENTS & EDUCATORS</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">Your role is critical. The Allies Portal provides tools to support, guide, and protect the children and students in your care, fostering a culture of zero tolerance.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">OPENING DIFFICULT CONVERSATIONS</h4><p class="text-gray-300">Start with gentle, open-ended questions like, "I've noticed you seem quiet lately. How are things really going?" Avoid jumping straight to accusations or solutions.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">RECOGNIZING WARNING SIGNS</h4><p class="text-gray-300">Look for changes in behavior (sleeping habits, eating patterns, grades) or unexplained physical complaints. These are often indicators of distress. Seek professional help if signs persist.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">CREATING A SUPPORTIVE ENVIRONMENT</h4><p class="text-gray-300">Ensure every student or child knows exactly who they can talk to and what the protocol is for reporting incidents, guaranteeing confidentiality and swift action.</p><div class="mt-8 text-center"><button class="btn" onclick="closeDemo()" style="font-family:var(--font-body);">VIEW FULL GUIDE</button></div>`;
+                title = 'The Resilience Toolkit: Mental Wellness';
+                externalUrl = 'https://hub.7e.com/toolkit/resilience';
+                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title.toUpperCase()}: BUILDING YOUR INNER STRENGTH</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">Resilience is a learned skill. Use these quick exercises daily to build emotional stability and mental toughness.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">1. 5-4-3-2-1 GROUNDING TECHNIQUE (1 MINUTE)</h4><p class="text-gray-300">A sensory exercise to pull you into the present moment when stress hits. (**5** things you can SEE, **4** things you can FEEL, **3** things you can HEAR, **2** things you can SMELL, **1** thing you can TASTE.)</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">2. POSITIVE SELF-TALK SCRIPTING (2 MINUTES)</h4><p class="text-gray-300">Counter negative internal dialog with prepared, positive affirmations:</p><div class="text-lg text-white font-mono mt-3 bg-gray-800 p-4 rounded-lg border border-cyan-500/50">"I AM CAPABLE. THIS FEELING IS TEMPORARY. I AM STRONG ENOUGH TO HANDLE THIS."</div>`;
+            } else if (name === 'Empathy Guide') {
+                title = 'The Empathy Guide: Conflict Resolution';
+                externalUrl = 'https://hub.7e.com/guides/empathy-conflict';
+                contentHTML = `<h3 style="font-family:var(--font-heading);" class="text-4xl font-extrabold text-cyan-400 mb-6 border-b pb-3 border-gray-700">${title}</h3><p class="muted mb-6 text-lg" style="color:var(--muted);">A short guide on how to approach conflicts with empathy to find constructive solutions, not just assign blame.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">1. LISTEN TO UNDERSTAND, NOT TO REPLY</h4><p class="text-gray-300">The first step is active listening. Focus on the other person's perspective, even if you disagree. This helps de-escalate emotional responses.</p><h4 style="font-family:var(--font-heading);" class="text-2xl font-bold mt-8 mb-3 text-cyan-400">2. VALIDATE FEELINGS, ADDRESS BEHAVIOR</h4><p class="text-gray-300">Acknowledge that their feelings are real ("I hear that you are frustrated"), but firmly address unacceptable behavior. Feelings are valid; harmful actions are not.</p>`;
             }
 
-            content.innerHTML = contentHTML;
+
+            // This is the common wrapper for the modal content, simulating an external page load.
+            content.innerHTML = `
+                <div style="font-family: var(--font-body); padding: 10px;">
+                    <h2 class="text-3xl font-extrabold text-white mb-2" style="font-family:var(--font-heading);">${title}</h2>
+                    <p class="text-lg text-red-400 mb-6 font-bold" style="color:var(--accent2);">Redirecting to External Resource Page...</p>
+                    <div class="p-4 rounded-lg border border-gray-700 bg-gray-900 mb-8">
+                        <p class="text-sm muted">External URL:</p>
+                        <p class="text-lg font-mono text-cyan-400">${externalUrl}</p>
+                    </div>
+                    
+                    ${contentHTML}
+
+                    <div class="mt-8 text-center">
+                        <a href="${externalUrl}" target="_blank" class="btn" style="padding:15px 30px; font-size:1.1rem; display:inline-block; text-decoration:none; font-family:var(--font-body);">OPEN EXTERNAL DOCUMENT</a>
+                    </div>
+                </div>
+            `;
+            
             document.body.style.overflow = 'hidden';
+
+            // If mobile menu is open, close it when opening a modal
+            if (document.getElementById('mobileMenu')?.classList.contains('open')) {
+                toggleMobileMenu();
+            }
         }
         
         const PLEDGE_KEY = '7E_pledge_count';
@@ -704,6 +968,10 @@
                 if(e.key==='Escape') { 
                     closeDemo(); 
                     closePledgeModal();
+                    // Close the mobile menu on escape if it's open
+                    if (document.getElementById('mobileMenu')?.classList.contains('open')) {
+                        toggleMobileMenu();
+                    }
                 }
             });
         })();
