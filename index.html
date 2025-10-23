@@ -1122,9 +1122,8 @@
 
         // 5. CORE PLEDGE LOGIC FUNCTIONS
 
-        / 
-         * Updates the HTML elements to show the latest pledge count.
-         */
+         
+         
         function updatePledgeDisplay() {
             // 1. Primary Counter (in the Pledge section)
             const primaryCounterEl = document.getElementById('pledgeCounter');
@@ -1137,9 +1136,7 @@
             console.log("Display updated. Current count:", currentPledges);
         }
 
-        / 
-         * Submits the pledge, updates the counter, AND saves the pledge text.
-         */
+        
         window.submitPledge = async function() {
             const input = document.getElementById('pledgeInput');
             const pledgeText = input.value.trim();
@@ -1189,8 +1186,8 @@
             }
         }
 
-        / 
-         * Listens in real-time for any changes to the counter in the database.
+         
+         /* Listens in real-time for any changes to the counter in the database.
          */
         function startPledgeListener() {
             // onSnapshot establishes a real-time connection to the document
