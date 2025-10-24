@@ -1074,12 +1074,7 @@
                 });
             });
 
-            // Keyboard Shortcuts
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'r' || e.key === 'R') scrollToSection('resources');
-                if (e.key === 'p' || e.key === 'P') scrollToSection('pledge');
-                if (e.key === 't' || e.key === 'T') scrollToSection('testimonials');
-                if (e.key === 'f' || e.key === 'F') scrollToSection('faq');
+            
                 if (e.key === 'Escape') {
                     closeDemo();
                     closePledgeModal();
